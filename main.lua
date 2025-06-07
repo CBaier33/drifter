@@ -13,7 +13,6 @@ function love.load()
 end
 
 function love.update(dt)
-  print(#barriers)
   Player:update(dt)
   for _, barrier in ipairs(barriers) do
     barrier:update(dt)
