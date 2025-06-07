@@ -1,5 +1,6 @@
 local Player = require("player")
 local Barrier = require("barrier")
+
 -- barriers table
 local barriers = {}
 
@@ -12,6 +13,7 @@ function love.load()
 end
 
 function love.update(dt)
+  print(#barriers)
   Player:update(dt)
   for _, barrier in ipairs(barriers) do
     barrier:update(dt)
@@ -21,6 +23,11 @@ function love.update(dt)
   local last = barriers[#barriers]
   if (last.left.y > 50) then
     newBarrier()
+  end
+
+  -- remove barriers once its off the screen
+  if barriers[1].left.y > 800 then
+    table.remove(barriers, 1)
   end
 
 end
@@ -40,3 +47,4 @@ function newBarrier()
   table.insert(barriers, newBarrier)
 
 end
+

@@ -29,7 +29,7 @@ function BarrierLeft:new()
 end
 
 function BarrierLeft:load()
-  self.width = math.random(50, 250)
+  self.width = math.random(100, 300)
   self.height = 50
 
   self.x = 0
