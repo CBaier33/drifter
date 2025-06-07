@@ -1,7 +1,6 @@
 local Player = require("player")
--- barrier loaded in as constructor
 local Barrier = require("barrier")
--- barriers table to hold all barriers
+-- barriers table
 local barriers = {}
 
 function love.load()
@@ -34,9 +33,10 @@ function love.draw()
 
 end
 
--- function 
+-- function to create new barriers
 function newBarrier()
   local newBarrier = Barrier:new()
   newBarrier:load()
   table.insert(barriers, newBarrier)
+
 end
