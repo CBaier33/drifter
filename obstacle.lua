@@ -36,11 +36,10 @@ function Car:new()
 end
 
 function Car:load()
-  --TODO
   self.width = 50
   self.height = 60
 
-  self.x = math.random(100, 500)
+  self.x = math.random(0, 500)
   self.y = -50
 
   self.speed = 500
@@ -54,14 +53,13 @@ function TrashPile:new()
 end
 
 function TrashPile:load()
-  --TODO
   self.width = 100
   self.height = 100
 
-  self.x =  math.random(100, 500)
+  self.x =  math.random(0, 500)
   self.y = -100
 
-  self.speed = 200
+  self.speed = 300
 
 end
 
