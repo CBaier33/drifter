@@ -1,49 +1,49 @@
 local Player = require("player")
-local Barrier = require("barrier")
+local Obstacle = require("obstacle")
 
--- barriers table
-local barriers = {}
+-- obstacles table
+local obstacles = {}
 
 function love.load()
   Player:load()
-  local b = Barrier:new()
-  b:load()
-  table.insert(barriers, b)
+  local o = Obstacle:new()
+  o:load()
+  table.insert(obstacles, o)
 
 end
 
 function love.update(dt)
   Player:update(dt)
-  for _, barrier in ipairs(barriers) do
-    barrier:update(dt)
+  for _, obstacle in ipairs(obstacles) do
+    obstacle:update(dt)
   end
 
-  -- load in new barrier when last barrier reaches screen
-  local last = barriers[#barriers]
-  if (last.left.y > 50) then
-    newBarrier()
+  -- load in new obstacle when last obstacle reaches screen
+  local last = obstacles[#obstacles]
+  if (last.obstacle.y > 50) then
+    newObstacle()
   end
 
-  -- remove barriers once its off the screen
-  if barriers[1].left.y > 800 then
-    table.remove(barriers, 1)
+  -- remove obstacle once its off the screen
+  if obstacles[1].obstacle.y > 800 then
+    table.remove(obstacles, 1)
   end
 
 end
 
 function love.draw()
   Player:draw()
-  for _, barrier in ipairs(barriers) do
+  for _, barrier in ipairs(obstacles) do
     barrier:draw()
   end
 
 end
 
 -- function to create new barriers
-function newBarrier()
-  local newBarrier = Barrier:new()
-  newBarrier:load()
-  table.insert(barriers, newBarrier)
+function newObstacle()
+  local newObstacle = Obstacle:new()
+  newObstacle:load()
+  table.insert(obstacles, newObstacle)
 
 end
 
