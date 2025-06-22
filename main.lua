@@ -20,6 +20,13 @@ function love.update(dt)
     obstacle:update(dt)
   end
 
+  -- obastacle player collision handling
+  for _, obstacle in ipairs(obstacles) do
+    if PlayerObjectCheckCollision(Player, obstacle) then
+      print("collision!")
+    end
+  end
+
   -- load in new obstacle when last obstacle reaches screen
   local last = obstacles[#obstacles]
   if (last.obstacle.y > 200) then
@@ -68,4 +75,13 @@ function obstacleInLane(table, x, width)
   return false
 
 end
+
+-- collision handling for obstacles and player
+function PlayerObjectCheckCollision(player, obstacle)
+  return player.x < obstacle.obstacle.x + obstacle.obstacle.width and
+         obstacle.obstacle.x < player.x + player.width and
+         player.y < obstacle.obstacle.y + obstacle.obstacle.height and
+         obstacle.obstacle.y < player.y + player.height
+end
+
 
