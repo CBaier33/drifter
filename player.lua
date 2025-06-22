@@ -20,6 +20,7 @@ end
 -- player movement methods
 function Player:move(dt) 
 
+  -- determine if player is moving
   if self.moveDir == 'l' and not self:atBoundary("l") then
     self.x = self.x - self.speed * dt
     self.speed = self.speed - 5
@@ -30,6 +31,7 @@ function Player:move(dt)
 
   end
 
+  -- change player direction
   if love.keyboard.isDown("a") then
     self.speed = 500
     self.moveDir = 'l'
@@ -40,6 +42,7 @@ function Player:move(dt)
   elseif self.speed <= 0 or self:atBoundary("l") or self:atBoundary("r") then
     self.moveDir = 'n'
   end
+
 end
 
 function Player:atBoundary(dir)
