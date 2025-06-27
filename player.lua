@@ -5,7 +5,8 @@ function Player:load()
   self.height = 50
 
   self.x = love.graphics.getWidth() / 2 - self.width / 2
-  self.y = love.graphics.getHeight() - 200
+  -- self.y = love.graphics.getHeight() - 200
+  self.y = love.graphics.getHeight() + 50
 
   self.speed = 500
   self.moveDir = 'n'
@@ -13,8 +14,16 @@ function Player:load()
 end
 
 function Player:update(dt)
-  Player:move(dt)
+  if Player.y > love.graphics.getHeight() - 200 then
+    Player:initPosition()
+  else
+    Player:move(dt)
+  end
 
+end
+
+function Player:initPosition()
+  self.y = self.y - 2
 end
 
 -- player movement methods
@@ -38,6 +47,7 @@ function Player:move(dt)
   elseif love.keyboard.isDown("d") then
     self.speed = 500
     self.moveDir = 'r'
+
   -- prevent speed from going negative or passing boundaries
   elseif self.speed <= 0 or self:atBoundary("l") or self:atBoundary("r") then
     self.moveDir = 'n'

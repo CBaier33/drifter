@@ -3,6 +3,8 @@ local Obstacle = require("obstacle")
 
 -- obstacles table
 local obstacles = {}
+-- keeps track of total game runtime
+local gameTime = 0
 
 function love.load()
   Player:load()
@@ -15,7 +17,14 @@ function love.load()
 end
 
 function love.update(dt)
+  -- update total game runtime
+  gameTime = gameTime + dt
+
   Player:update(dt)
+
+  -- brief wait time for obstacles before player initializes
+  if gameTime < 1 then return end
+
   for _, obstacle in ipairs(obstacles) do
     obstacle:update(dt)
   end
