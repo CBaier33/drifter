@@ -11,7 +11,7 @@ function Player:load()
   self.moveDir = 'n'
   self.crash = false
 
-  self.image = love.graphics.newImage('Player.png')
+  self.image = love.graphics.newImage('images/Player.png')
 
 end
 

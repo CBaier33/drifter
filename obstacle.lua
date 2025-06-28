@@ -49,7 +49,7 @@ function Car:load()
 
   self.speed = 500
 
-  self.image = love.graphics.newImage('Car.png')
+  self.image = love.graphics.newImage('images/Car.png')
 
 end
 
@@ -68,7 +68,7 @@ function Truck:load()
 
   self.speed = 500
 
-  self.image = love.graphics.newImage('Truck.png')
+  self.image = love.graphics.newImage('images/Truck.png')
 
 end
 
