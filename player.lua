@@ -1,8 +1,8 @@
 local Player = {}
 
 function Player:load()
-  self.width = 50
-  self.height = 50
+  self.width = 45
+  self.height = 80
 
   self.x = love.graphics.getWidth() / 2 - self.width / 2
   self.y = love.graphics.getHeight() + 50
@@ -10,6 +10,8 @@ function Player:load()
   self.speed = 500
   self.moveDir = 'n'
   self.crash = false
+
+  self.image = love.graphics.newImage('Player.png')
 
 end
 
@@ -76,7 +78,9 @@ end
 
 function Player:draw()
   -- temporary player sprite
-  love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
+  local scaleX = self.width / self.image:getWidth()
+  local scaleY = self.height / self.image:getHeight()
+  love.graphics.draw(self.image, self.x, self.y, 0, scaleX, scaleY)
 end
 
 return Player
