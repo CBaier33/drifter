@@ -5,11 +5,11 @@ function Player:load()
   self.height = 50
 
   self.x = love.graphics.getWidth() / 2 - self.width / 2
-  -- self.y = love.graphics.getHeight() - 200
   self.y = love.graphics.getHeight() + 50
 
   self.speed = 500
   self.moveDir = 'n'
+  self.crash = false
 
 end
 
@@ -26,6 +26,11 @@ function Player:initPosition()
   self.y = self.y - 2
 end
 
+function Player:encounterObject()
+  self.moveDir = 'c'
+  self.crash = true
+end
+
 -- player movement methods
 function Player:move(dt) 
 
@@ -38,18 +43,21 @@ function Player:move(dt)
     self.x = self.x + self.speed * dt
     self.speed = self.speed - 5
 
+  elseif self.moveDir == 'c' then
+    self.speed = 0
+
   end
 
   -- change player direction
-  if love.keyboard.isDown("a") then
+  if love.keyboard.isDown("a") and self.moveDir ~= 'c' then
     self.speed = 500
     self.moveDir = 'l'
-  elseif love.keyboard.isDown("d") then
+  elseif love.keyboard.isDown("d") and self.moveDir ~='c' then
     self.speed = 500
     self.moveDir = 'r'
 
   -- prevent speed from going negative or passing boundaries
-  elseif self.speed <= 0 or self:atBoundary("l") or self:atBoundary("r") then
+  elseif (self.speed <= 0 or self:atBoundary("l") or self:atBoundary("r")) and (self.crash == false) then
     self.moveDir = 'n'
   end
 

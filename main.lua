@@ -17,7 +17,6 @@ function love.load()
 end
 
 function love.update(dt)
-  -- update total game runtime
   gameTime = gameTime + dt
 
   Player:update(dt)
@@ -31,19 +30,19 @@ function love.update(dt)
 
   -- obastacle player collision handling
   for _, obstacle in ipairs(obstacles) do
-    if PlayerObjectCheckCollision(Player, obstacle) then
-      print("collision!")
+    if playerObjectCheckCollision(Player, obstacle) then
+      Player:encounterObject()
     end
   end
 
   -- load in new obstacle when last obstacle reaches screen
   local last = obstacles[#obstacles]
-  if (last.obstacle.y > 200) then
+  if (last.obstacle.y > love.graphics.getHeight() / 4) then
     newObstacle()
   end
 
   -- remove obstacle once its off the screen
-  if obstacles[1].obstacle.y > 800 then
+  if obstacles[1].obstacle.y > love.graphics.getHeight() then
     table.remove(obstacles, 1)
   end
 
@@ -51,6 +50,7 @@ end
 
 function love.draw()
   Player:draw()
+
   for _, barrier in ipairs(obstacles) do
     barrier:draw()
   end
@@ -86,11 +86,10 @@ function obstacleInLane(table, x, width)
 end
 
 -- collision handling for obstacles and player
-function PlayerObjectCheckCollision(player, obstacle)
+function playerObjectCheckCollision(player, obstacle)
   return player.x < obstacle.obstacle.x + obstacle.obstacle.width and
          obstacle.obstacle.x < player.x + player.width and
          player.y < obstacle.obstacle.y + obstacle.obstacle.height and
          obstacle.obstacle.y < player.y + player.height
 end
-
 
