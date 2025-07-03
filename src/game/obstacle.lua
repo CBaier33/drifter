@@ -1,7 +1,7 @@
+local Obstacle = {}
 local TrashPile = {}
 local Car = {}
 local Truck = {}
-local Obstacle = {}
 
 Obstacle.__index = Obstacle
 Car.__index = Car
@@ -49,7 +49,14 @@ function Car:load()
 
   self.speed = 500
 
-  self.image = love.graphics.newImage('images/Car.png')
+  -- error handling for failed image loads
+  local success, imageOrError = pcall(love.graphics.newImage, 'images/Car.png')
+  if success then
+    self.image = imageOrError
+  else
+    print("Failed to load Car image:", imageOrError)
+    self.image = nil
+  end
 
 end
 
@@ -68,7 +75,13 @@ function Truck:load()
 
   self.speed = 500
 
-  self.image = love.graphics.newImage('images/Truck.png')
+  local success, imageOrError = pcall(love.graphics.newImage, 'images/Truck.png')
+  if success then
+    self.image = imageOrError
+  else
+    print("Failed to load Truck image:", imageOrError)
+    self.image = nil
+  end
 
 end
 
@@ -115,22 +128,28 @@ function Obstacle:draw()
 end
 
 function Car:draw()
-  local scaleX = self.width / self.image:getWidth()
-  local scaleY = self.height / self.image:getHeight()
-  love.graphics.draw(self.image, self.x, self.y, 0, scaleX, scaleY)
-
+  if self.image then
+    local scaleX = self.width / self.image:getWidth()
+    local scaleY = self.height / self.image:getHeight()
+    love.graphics.draw(self.image, self.x, self.y, 0, scaleX, scaleY)
+  else
+    love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
+  end
 end
 
 function TrashPile:draw()
   love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
-
 end
 
-function Truck:draw()
-  local scaleX = self.width / self.image:getWidth()
-  local scaleY = self.height / self.image:getHeight()
-  love.graphics.draw(self.image, self.x, self.y, 0, scaleX, scaleY)
 
+function Truck:draw()
+  if self.image then
+    local scaleX = self.width / self.image:getWidth()
+    local scaleY = self.height / self.image:getHeight()
+    love.graphics.draw(self.image, self.x, self.y, 0, scaleX, scaleY)
+  else
+    love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
+  end
 end
 
 return Obstacle
