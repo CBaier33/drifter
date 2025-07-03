@@ -1,12 +1,14 @@
-local Player = require("player")
-local Obstacle = require("obstacle")
+local Player = require("game.player")
+local Obstacle = require("game.obstacle")
+
+local Game = {}
 
 -- obstacles table
 local obstacles = {}
 -- keeps track of total game runtime
 local gameTime = 0
 
-function love.load()
+function Game:load()
   Player:load()
 
   local o = Obstacle:new()
@@ -16,7 +18,7 @@ function love.load()
 
 end
 
-function love.update(dt)
+function Game:update(dt)
   gameTime = gameTime + dt
 
   Player:update(dt)
@@ -48,7 +50,7 @@ function love.update(dt)
 
 end
 
-function love.draw()
+function Game:draw()
   Player:draw()
 
   for _, barrier in ipairs(obstacles) do
@@ -93,3 +95,4 @@ function playerObjectCheckCollision(player, obstacle)
          obstacle.obstacle.y < player.y + player.height
 end
 
+return Game
