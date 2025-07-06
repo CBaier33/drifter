@@ -1,9 +1,9 @@
-local StateManager = require("StateManager")
-local Game = require('game/game')
-local Menu = require('menu/menu')
+local StateManager = require('StateManager')
+local Game = require('game.game')
+local StartMenu = require('menus.start.menu')
 
 function love.load()
-    StateManager:switch(Menu, StateManager)
+    StateManager:switch(StartMenu, StateManager)
 end
 
 function love.update(dt)

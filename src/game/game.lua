@@ -1,5 +1,11 @@
-local Player = require("game.player")
-local Obstacle = require("game.obstacle")
+
+-- Game Objects
+local Player = require('game.player')
+local Obstacle = require('game.obstacle')
+local Road = require('game.road')
+
+-- Pause Menu
+local PauseMenu = require('menus.pause.menu')
 
 local Game = {}
 
@@ -9,6 +15,8 @@ local obstacles = {}
 local gameTime = 0
 
 function Game:load()
+  PauseMenu:load()
+  Road:load()
   Player:load()
 
   local o = Obstacle:new()
@@ -34,6 +42,9 @@ function Game:update(dt)
   for _, obstacle in ipairs(obstacles) do
     if playerObjectCheckCollision(Player, obstacle) then
       Player:encounterObject()
+
+      -- GAME OVER SEQUENCE
+      -- PauseMenu:open() testing..
     end
   end
 
@@ -51,12 +62,14 @@ function Game:update(dt)
 end
 
 function Game:draw()
+  Road:draw()
   Player:draw()
 
   for _, barrier in ipairs(obstacles) do
     barrier:draw()
   end
 
+  PauseMenu:draw()
 end
 
 -- function to create new barriers
