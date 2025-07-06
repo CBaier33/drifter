@@ -12,7 +12,6 @@ function Buttons:load(startGameCallback)
   table.insert(buttons, newButton(
     "Start",
     function()
-      print("Starting Game..")
       startGameCallback()
     end)
   )

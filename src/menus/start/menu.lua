@@ -1,8 +1,8 @@
-local Menu = {}
+local StartMenu = {}
 local Game = require('game.game')
-local Buttons = require('menu.buttons')
+local Buttons = require('menus.start.buttons')
 
-function Menu:load(stateManager)
+function StartMenu:load(stateManager)
   self.stateManager = stateManager
   Buttons:load(function()
     self.stateManager:switch(Game, self.stateManager)
@@ -10,12 +10,12 @@ function Menu:load(stateManager)
 
 end
 
-function Menu:update(dt)
+function StartMenu:update(dt)
   Buttons:update(dt)
 end
 
-function Menu:draw()
+function StartMenu:draw()
   Buttons:draw()
 end
 
-return Menu
+return StartMenu

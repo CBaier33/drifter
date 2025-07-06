@@ -4,7 +4,7 @@ function Player:load()
   self.width = 45
   self.height = 80
 
-  self.x = love.graphics.getWidth() / 2 - self.width / 2
+  self.x = love.graphics.getWidth() * 0.5  - self.width * 0.5
   self.y = love.graphics.getHeight() + 50
 
   self.speed = 500
