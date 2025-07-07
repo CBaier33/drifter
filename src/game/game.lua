@@ -1,21 +1,22 @@
+local Game = {}
 
 -- Game Objects
 local Player = require('game.player')
 local Obstacle = require('game.obstacle')
 local Road = require('game.road')
 
--- Pause Menu
-local PauseMenu = require('menus.pause.menu')
-
-local Game = {}
+-- Menus
+local Menus = require('menus.menus')
 
 -- obstacles table
 local obstacles = {}
 -- keeps track of total game runtime
 local gameTime = 0
 
-function Game:load()
-  PauseMenu:load()
+function Game:load(stateManager)
+  self.stateManager = stateManager
+
+  Menus:load(stateManager)
   Road:load()
   Player:load()
 
@@ -27,6 +28,7 @@ function Game:load()
 end
 
 function Game:update(dt)
+  Menus:update(dt)
   gameTime = gameTime + dt
 
   Player:update(dt)
@@ -69,7 +71,7 @@ function Game:draw()
     barrier:draw()
   end
 
-  PauseMenu:draw()
+  Menus:draw()
 end
 
 -- function to create new barriers
