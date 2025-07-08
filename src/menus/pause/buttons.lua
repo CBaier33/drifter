@@ -1,35 +1,38 @@
-local Buttons = {}
+local Buttons = {
+  buttons = nil,
+  font = nil,
+  BUTTON_HEIGHT = 64,
+}
 
-local BUTTON_HEIGHT = 64
-local buttons = {}
+function Buttons:load(stateManager, menuManager)
+  self.stateManager = stateManager
+  self.menuManager = menuManager
+  self.font = love.graphics.newFont(32)
+  self.buttons = {}
 
-local font = nil
-
-function Buttons:load(startGameCallback)
-
-  font = love.graphics.newFont(32)
-
-  table.insert(buttons, newButton(
-      "Resume",
-       function()
-         print("Resume Game..")
-       end)
+  table.insert(self.buttons, newButton(
+    "Resume",
+    function()
+      print("Resume Game..")
+      self.menuManager:play()
+    end)
   )
 
-  table.insert(buttons, newButton(
+  table.insert(self.buttons, newButton(
     "Restart",
     function()
       print("Restart Game")
-      -- startGameCallback() ?
+      self.stateManager:switch("game", self.stateManager)
     end)
   )
 
 
-  table.insert(buttons, newButton(
-      "Home",
-       function()
-         print("Return to Main Menu.")
-       end)
+  table.insert(self.buttons, newButton(
+    "Home", 
+    function()
+      print("Return to Main Menu.")
+      self.stateManager:switch("start", self.stateManager)
+    end)
   )
 
 end
@@ -46,10 +49,10 @@ function Buttons:draw()
   -- TODO -> orient buttons in bottom-right quadrant of screen
   local button_width = ww * (1/3)
   local margin = 16
-  local total_height = (BUTTON_HEIGHT + margin) * #buttons
+  local total_height = (self.BUTTON_HEIGHT + margin) * #self.buttons
   local button_location = 0
 
-  for i, button in ipairs(buttons) do
+  for i, button in ipairs(self.buttons) do
     button.last = button.now
 
     local bx = (ww * 0.5) - (button_width * 0.5)
@@ -60,7 +63,7 @@ function Buttons:draw()
     local mx, my = love.mouse.getPosition()
 
     local selected = mx > bx and mx < bx + button_width and 
-      my > by and my < by + BUTTON_HEIGHT
+      my > by and my < by + self.BUTTON_HEIGHT
 
     if selected then
       color = {0.8, 0.8, 0.9, 1.0}
@@ -77,22 +80,22 @@ function Buttons:draw()
       bx,
       by,
       button_width,
-      BUTTON_HEIGHT
+      self.BUTTON_HEIGHT
     )
 
     love.graphics.setColor(0, 0, 0, 1)
 
-    local textW = font:getWidth(button.text)
-    local textH = font:getHeight(button.text)
+    local textW = self.font:getWidth(button.text)
+    local textH = self.font:getHeight(button.text)
 
     love.graphics.print(
       button.text,
-      font,
+      self.font,
       (ww * 0.5) - textW * 0.5,
       by + textH * 0.5
     )
 
-    button_location = button_location + (BUTTON_HEIGHT + margin)
+    button_location = button_location + (self.BUTTON_HEIGHT + margin)
     love.graphics.setColor(1, 1, 1, 1) -- reset global draw color
   end
 

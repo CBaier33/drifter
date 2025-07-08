@@ -1,33 +1,36 @@
 local Buttons = {
-  buttons = {},
+  buttons = nil,
   font = nil,
-  BUTTON_HEIGHT = 64
+  BUTTON_HEIGHT = 64,
 }
 
-function Buttons:load(stateManager)
+function Buttons:load(stateManager, menuManager)
   self.stateManager = stateManager
+  self.menuManager = menuManager
+  self.font = love.graphics.newFont(32)
   self.buttons = {}
 
-  self.font = love.graphics.newFont(32)
-
   table.insert(self.buttons, newButton(
-    "Start",
+    "Game Over!",
     function()
-      stateManager:switch("game", self.stateManager)
+      print("temp")
     end)
   )
 
   table.insert(self.buttons, newButton(
-    "Options",
+    "Restart",
     function()
-      print("Option Menu..")
+      print("Restart Game")
+      self.stateManager:switch("game", self.stateManager)
     end)
   )
 
+
   table.insert(self.buttons, newButton(
-    "Credits",
+    "Home", 
     function()
-      print("Roll Credits..")
+      print("Return to Main Menu.")
+      self.stateManager:switch("start", self.stateManager)
     end)
   )
 
