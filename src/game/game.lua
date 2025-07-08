@@ -1,20 +1,18 @@
 local Game = {}
+Game.__index = Game
 
--- Game Objects
+-- Dependencies
 local Player = require('game.player')
 local Obstacle = require('game.obstacle')
 local Road = require('game.road')
-
--- Menus
 local Menus = require('menus.menus')
 
--- obstacles table
-local obstacles = {}
--- keeps track of total game runtime
-local gameTime = 0
+function Game:new(stateManager)
+  local self = setmetatable({}, Game)
 
-function Game:load(stateManager)
   self.stateManager = stateManager
+  self.obstacles = {}
+  self.gameTime = 0
 
   Menus:load(stateManager)
   Road:load()
@@ -22,88 +20,73 @@ function Game:load(stateManager)
 
   local o = Obstacle:new()
   o:load()
+  table.insert(self.obstacles, o)
 
-  table.insert(obstacles, o)
-
+  return self
 end
 
 function Game:update(dt)
   Menus:update(dt)
-  gameTime = gameTime + dt
+  self.gameTime = self.gameTime + dt
 
   Player:update(dt)
 
-  -- brief wait time for obstacles before player initializes
-  if gameTime < 1 then return end
+  if self.gameTime < 1 then return end
 
-  for _, obstacle in ipairs(obstacles) do
+  for _, obstacle in ipairs(self.obstacles) do
     obstacle:update(dt)
   end
 
-  -- obastacle player collision handling
-  for _, obstacle in ipairs(obstacles) do
-    if playerObjectCheckCollision(Player, obstacle) then
+  for _, obstacle in ipairs(self.obstacles) do
+    if self:playerObjectCheckCollision(Player, obstacle) then
       Player:encounterObject()
-
-      -- GAME OVER SEQUENCE
-      -- PauseMenu:open() testing..
+      -- trigger menus, etc.
     end
   end
 
-  -- load in new obstacle when last obstacle reaches screen
-  local last = obstacles[#obstacles]
-  if (last.obstacle.y > love.graphics.getHeight() / 4) then
-    newObstacle()
+  local last = self.obstacles[#self.obstacles]
+  if last and last.obstacle.y > love.graphics.getHeight() / 4 then
+    self:newObstacle()
   end
 
-  -- remove obstacle once its off the screen
-  if obstacles[1].obstacle.y > love.graphics.getHeight() then
-    table.remove(obstacles, 1)
+  if #self.obstacles > 0 and self.obstacles[1].obstacle.y > love.graphics.getHeight() then
+    table.remove(self.obstacles, 1)
   end
-
 end
 
 function Game:draw()
   Road:draw()
   Player:draw()
 
-  for _, barrier in ipairs(obstacles) do
+  for _, barrier in ipairs(self.obstacles) do
     barrier:draw()
   end
 
   Menus:draw()
 end
 
--- function to create new barriers
-function newObstacle()
+function Game:newObstacle()
   local newObstacle = Obstacle:new()
   newObstacle:load()
 
-  -- ensure that no obstacles are ever in the same lane
-  while #obstacles > 0 and obstacleInLane(obstacles, newObstacle.obstacle.x, newObstacle.obstacle.width) do
-    newObstacle = nil
+  while #self.obstacles > 0 and self:obstacleInLane(newObstacle.obstacle.x, newObstacle.obstacle.width) do
     newObstacle = Obstacle:new()
     newObstacle:load()
   end
 
-  table.insert(obstacles, newObstacle)
-
+  table.insert(self.obstacles, newObstacle)
 end
 
--- helper function for checking if obstacles table contains an obstacle in that lane
-function obstacleInLane(table, x, width)
-  for _, value in pairs(table) do
+function Game:obstacleInLane(x, width)
+  for _, value in pairs(self.obstacles) do
     if x + width >= value.obstacle.x and x <= value.obstacle.x + value.obstacle.width then
       return true
     end
   end
-
   return false
-
 end
 
--- collision handling for obstacles and player
-function playerObjectCheckCollision(player, obstacle)
+function Game:playerObjectCheckCollision(player, obstacle)
   return player.x < obstacle.obstacle.x + obstacle.obstacle.width and
          obstacle.obstacle.x < player.x + player.width and
          player.y < obstacle.obstacle.y + obstacle.obstacle.height and
@@ -111,3 +94,4 @@ function playerObjectCheckCollision(player, obstacle)
 end
 
 return Game
+

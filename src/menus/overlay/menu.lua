@@ -1,19 +1,21 @@
-local OverlayMenu = {}
+local OverlayMenu = {
+  Buttons = require('menus.overlay.buttons')
+}
 
-local Buttons = require('menus.overlay.buttons')
 
-function OverlayMenu:load()
-  Buttons:load()
+function OverlayMenu:load(menuManager)
+  self.menuManager = menuManager
+  self.Buttons:load(self.menuManager)
   self.active = true
 end
 
 function OverlayMenu:update(dt)
-  Buttons:update(dt)
+  self.Buttons:update(dt)
 end
 
 function OverlayMenu:draw()
   if (self.active) then
-    Buttons:draw()
+    self.Buttons:draw()
   end
 end
 

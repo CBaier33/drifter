@@ -1,22 +1,21 @@
-local PauseMenu = {}
+local PauseMenu = {
+  Buttons = require('menus.pause.buttons'),
+}
 
-local Buttons = require('menus.pause.buttons')
--- add functionality in game to stop all movement
--- while also saving state.
-
-function PauseMenu:load(stateManager)
+function PauseMenu:load(stateManager, menuManager)
   self.stateManager = stateManager
-  Buttons:load(self.stateManager)
+  self.menuManager = menuManager
+  self.Buttons:load(self.stateManager, self.menuManager)
   self.active = false
 end
 
 function PauseMenu:update(dt)
-  Buttons:update(dt)
+  self.Buttons:update(dt)
 end
 
 function PauseMenu:draw()
   if (self.active) then
-    Buttons:draw()
+    self.Buttons:draw()
   end
 end
 

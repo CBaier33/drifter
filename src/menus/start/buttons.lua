@@ -4,7 +4,8 @@ local Buttons = {
   BUTTON_HEIGHT = 64
 }
 
-function Buttons:load(startGame)
+function Buttons:load(stateManager)
+  self.stateManager = stateManager
   self.buttons = {}
 
   self.font = love.graphics.newFont(32)
@@ -12,7 +13,7 @@ function Buttons:load(startGame)
   table.insert(self.buttons, newButton(
     "Start",
     function()
-      startGame()
+      stateManager:switch("game", self.stateManager)
     end)
   )
 

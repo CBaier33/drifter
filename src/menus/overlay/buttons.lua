@@ -3,12 +3,13 @@ local Buttons = {
   BUTTON_WIDTH = 48,
   BUTTON_MARGIN = 16,
   buttons = nil,
-  font = nil
+  font = nil,
 }
 
-local Manager = require('menus.manager')
+--local Manager = require('menus.manager')
 
-function Buttons:load()
+function Buttons:load(menuManager)
+  self.menuManager = menuManager
   self.font = love.graphics.newFont(16)
   self.buttons = {}
 
@@ -16,7 +17,7 @@ function Buttons:load()
     "Pause",
     function()
       print("Pause Game..")
-      Manager:pause()
+      self.menuManager:pause()
     end)
   )
 

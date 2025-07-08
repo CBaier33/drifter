@@ -4,10 +4,7 @@ local StartMenu = {
 
 function StartMenu:load(stateManager)
   self.stateManager = stateManager
-  self.Buttons:load(function()
-    self.stateManager:switch("game", self.stateManager)
-  end)
-
+  self.Buttons:load(self.stateManager)
 end
 
 function StartMenu:update(dt)

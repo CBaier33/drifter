@@ -10,13 +10,11 @@ function StateManager:switch(newState, manager)
 
   if newState == "start" then
     self.current = StartMenu
+    self.current:load(manager)
   elseif newState == "game" then
-    self.current = Game
+    self.current = Game:new(manager)
   end
 
-  if self.current.load then
-    self.current:load(manager)
-  end
 end
 
 function StateManager:update(dt)

@@ -1,35 +1,34 @@
-local Menus = {}
-
-local Manager = require('menus.manager')
-local OverlayMenu = require('menus.overlay.menu')
-local PauseMenu = require('menus.pause.menu')
--- ExitMenu
--- StartMenu?
+local Menus = {
+  menuManager = require('menus.manager'),
+  OverlayMenu = require('menus.overlay.menu'),
+  PauseMenu = require('menus.pause.menu')
+  -- ExitMenu
+  -- StartMenu?
+}
 
 function Menus:load(stateManager)
   self.stateManager = stateManager
-
-  Manager:load()
-  OverlayMenu:load()
-  PauseMenu:load(self.stateManager)
+  self.menuManager:load()
+  self.OverlayMenu:load(self.menuManager)
+  self.PauseMenu:load(self.stateManager, self.menuManager)
 end
 
 function Menus:update(dt)
-  OverlayMenu:update(dt)
-  PauseMenu:update(dt)
+  self.OverlayMenu:update(dt)
+  self.PauseMenu:update(dt)
 end
 
 function Menus:draw()
-  if Manager:isPaused() then
-    PauseMenu:open()
-    OverlayMenu:close()
+  if self.menuManager:isPaused() then
+    self.PauseMenu:open()
+    self.OverlayMenu:close()
   else
-    OverlayMenu:open()
-    PauseMenu:close()
+    self.OverlayMenu:open()
+    self.PauseMenu:close()
   end
 
-  PauseMenu:draw()
-  OverlayMenu:draw()
+  self.PauseMenu:draw()
+  self.OverlayMenu:draw()
 end
 
 return Menus

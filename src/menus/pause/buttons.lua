@@ -1,14 +1,12 @@
 local Buttons = {
   buttons = nil,
   font = nil,
-  BUTTON_HEIGHT = 64
+  BUTTON_HEIGHT = 64,
 }
 
-local Manager = require('menus.manager')
-
-
-function Buttons:load(stateManager)
+function Buttons:load(stateManager, menuManager)
   self.stateManager = stateManager
+  self.menuManager = menuManager
   self.font = love.graphics.newFont(32)
   self.buttons = {}
 
@@ -16,7 +14,7 @@ function Buttons:load(stateManager)
     "Resume",
     function()
       print("Resume Game..")
-      Manager:play()
+      self.menuManager:play()
     end)
   )
 

@@ -11,4 +11,3 @@ end
 function love.draw()
   StateManager:draw()
 end
-
