@@ -11,10 +11,9 @@ function Buttons:load(stateManager, menuManager)
   self.buttons = {}
 
   table.insert(self.buttons, newButton(
-    "Resume",
+    "Game Over!",
     function()
-      print("Resume Game..")
-      self.menuManager:play()
+      print("temp")
     end)
   )
 

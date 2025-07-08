@@ -2,7 +2,6 @@ local OverlayMenu = {
   Buttons = require('menus.overlay.buttons')
 }
 
-
 function OverlayMenu:load(menuManager)
   self.menuManager = menuManager
   self.Buttons:load(self.menuManager)

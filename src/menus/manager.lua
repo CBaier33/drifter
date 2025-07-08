@@ -2,6 +2,7 @@ local Manager = {}
 
 function Manager:load()
   self.paused = false
+  self.gameover = false
 end
 
 function Manager:pause()

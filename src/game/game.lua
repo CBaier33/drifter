@@ -11,6 +11,7 @@ function Game:new(stateManager)
   local self = setmetatable({}, Game)
 
   self.stateManager = stateManager
+  self.gameActive = true -- temp to avoid crashes after collision
   self.obstacles = {}
   self.gameTime = 0
 
@@ -38,8 +39,10 @@ function Game:update(dt)
   end
 
   for _, obstacle in ipairs(self.obstacles) do
-    if self:playerObjectCheckCollision(Player, obstacle) then
+    if self:playerObjectCheckCollision(Player, obstacle) and self.gameActive then
       Player:encounterObject()
+      self.gameActive = false
+      self.stateManager:gameOver()
       -- trigger menus, etc.
     end
   end
