@@ -12,7 +12,6 @@ function Player:load()
   self.maxSpeed = 500          -- max horizontal speed
   self.driftForce = 100        -- how strongly car drifts back to center
 
-  self.moveDir = 'n'
   self.crash = false
 
   self.image = love.graphics.newImage('images/Player.png')
@@ -24,52 +23,57 @@ function Player:update(dt)
   else
     self:move(dt)
   end
+
 end
 
 function Player:initPosition()
   self.y = self.y - 2
+
 end
 
-function Player:encounterObject()
-  self.moveDir = 'c'
+function Player:registerCrash()
   self.crash = true
+
 end
 
 function Player:move(dt)
   local movingLeft = love.keyboard.isDown("a")
   local movingRight = love.keyboard.isDown("d")
 
-  if movingLeft and not movingRight then
-    if self.vx > 0 then
-      -- actively braking
-      self.vx = self.vx - self.acceleration * 3 * dt
+  if not self.crash then
+    if movingLeft and not movingRight then
+      if self.vx > 0 then
+        -- actively braking
+        self.vx = self.vx - self.acceleration * 3 * dt
+      else
+        -- normal acceleration left
+        self.vx = self.vx - self.acceleration * dt
+      end
+    elseif movingRight and not movingLeft then
+      if self.vx < 0 then
+        -- actively braking
+        self.vx = self.vx + self.acceleration * 3 * dt
+      else
+        -- normal acceleration right
+        self.vx = self.vx + self.acceleration * dt
+      end
     else
-      -- normal acceleration left
-      self.vx = self.vx - self.acceleration * dt
+      -- no input = light friction (passive slow down)
+      self.vx = self.vx * 0.97
+      if math.abs(self.vx) < 1 then self.vx = 0 end
     end
-  elseif movingRight and not movingLeft then
-    if self.vx < 0 then
-      -- actively braking
-      self.vx = self.vx + self.acceleration * 3 * dt
-    else
-      -- normal acceleration right
-      self.vx = self.vx + self.acceleration * dt
-    end
-  else
-    -- no input = light friction (passive slow down)
-    self.vx = self.vx * 0.97
-    if math.abs(self.vx) < 1 then self.vx = 0 end
+
+    -- Clamp velocity
+    self.vx = math.max(math.min(self.vx, self.maxSpeed), -self.maxSpeed)
+
+    -- Move player
+    self.x = self.x + self.vx * dt
+
   end
-
-  -- Clamp velocity
-  self.vx = math.max(math.min(self.vx, self.maxSpeed), -self.maxSpeed)
-
-  -- Move player
-  self.x = self.x + self.vx * dt
 end
 
 
-function Player:atBoundary(dir)
+--[[function Player:atBoundary(dir)
   local left = 0
   local right = love.graphics.getWidth()
 
@@ -78,7 +82,7 @@ function Player:atBoundary(dir)
   elseif dir == "r" then
     return self.x + self.width > right
   end
-end
+end]]
 
 function Player:draw()
   local scaleX = self.width / self.image:getWidth()

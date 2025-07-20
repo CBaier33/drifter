@@ -34,7 +34,7 @@ function Game:update(dt)
   ObstacleTable:update(dt)
 
   if self:playerObjectCheckCollision() and self.gameActive then
-    Player:encounterObject()
+    Player:registerCrash()
     self.gameActive = false
     self.stateManager:gameOver()
     -- trigger menus, etc.
