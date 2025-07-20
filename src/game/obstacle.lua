@@ -31,9 +31,8 @@ function Obstacle:load()
 end
 
 function Obstacle:update(dt)
-  self.obstacle:move(dt)
-
-end
+    self.obstacle:move(dt)
+  end
 
 function Obstacle:draw()
   self.obstacle:draw()
