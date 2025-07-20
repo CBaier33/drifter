@@ -87,12 +87,10 @@ function Obstacle:checkCollision(player)
        obstacle.y < player.y + player.height then
          return true
     end
+  end
 
   return false
-
-  end
 
 end
 
 return Obstacle
-
