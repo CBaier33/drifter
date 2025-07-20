@@ -4,24 +4,26 @@ function Player:load()
   self.width = 45
   self.height = 80
 
-  self.x = love.graphics.getWidth() * 0.5  - self.width * 0.5
+  self.x = love.graphics.getWidth() * 0.5 - self.width * 0.5
   self.y = love.graphics.getHeight() + 50
 
-  self.speed = 500
+  self.vx = 0                   -- horizontal velocity
+  self.acceleration = 900      -- how fast input builds velocity
+  self.maxSpeed = 500          -- max horizontal speed
+  self.driftForce = 100        -- how strongly car drifts back to center
+
   self.moveDir = 'n'
   self.crash = false
 
   self.image = love.graphics.newImage('images/Player.png')
-
 end
 
 function Player:update(dt)
-  if Player.y > love.graphics.getHeight() - 200 then
-    Player:initPosition()
+  if self.y > love.graphics.getHeight() - 200 then
+    self:initPosition()
   else
-    Player:move(dt)
+    self:move(dt)
   end
-
 end
 
 function Player:initPosition()
@@ -33,37 +35,39 @@ function Player:encounterObject()
   self.crash = true
 end
 
--- player movement methods
-function Player:move(dt) 
+function Player:move(dt)
+  local movingLeft = love.keyboard.isDown("a")
+  local movingRight = love.keyboard.isDown("d")
 
-  -- determine if player is moving
-  if self.moveDir == 'l' and not self:atBoundary("l") then
-    self.x = self.x - self.speed * dt
-    self.speed = self.speed - 5
-
-  elseif self.moveDir == 'r' and not self:atBoundary("r") then
-    self.x = self.x + self.speed * dt
-    self.speed = self.speed - 5
-
-  elseif self.moveDir == 'c' then
-    self.speed = 0
-
+  if movingLeft and not movingRight then
+    if self.vx > 0 then
+      -- actively braking
+      self.vx = self.vx - self.acceleration * 3 * dt
+    else
+      -- normal acceleration left
+      self.vx = self.vx - self.acceleration * dt
+    end
+  elseif movingRight and not movingLeft then
+    if self.vx < 0 then
+      -- actively braking
+      self.vx = self.vx + self.acceleration * 3 * dt
+    else
+      -- normal acceleration right
+      self.vx = self.vx + self.acceleration * dt
+    end
+  else
+    -- no input = light friction (passive slow down)
+    self.vx = self.vx * 0.97
+    if math.abs(self.vx) < 1 then self.vx = 0 end
   end
 
-  -- change player direction
-  if love.keyboard.isDown("a") and self.moveDir ~= 'c' then
-    self.speed = 500
-    self.moveDir = 'l'
-  elseif love.keyboard.isDown("d") and self.moveDir ~='c' then
-    self.speed = 500
-    self.moveDir = 'r'
+  -- Clamp velocity
+  self.vx = math.max(math.min(self.vx, self.maxSpeed), -self.maxSpeed)
 
-  -- prevent speed from going negative or passing boundaries
-  elseif (self.speed <= 0 or self:atBoundary("l") or self:atBoundary("r")) and (self.crash == false) then
-    self.moveDir = 'n'
-  end
-
+  -- Move player
+  self.x = self.x + self.vx * dt
 end
+
 
 function Player:atBoundary(dir)
   local left = 0
@@ -77,7 +81,6 @@ function Player:atBoundary(dir)
 end
 
 function Player:draw()
-  -- temporary player sprite
   local scaleX = self.width / self.image:getWidth()
   local scaleY = self.height / self.image:getHeight()
   love.graphics.draw(self.image, self.x, self.y, 0, scaleX, scaleY)
