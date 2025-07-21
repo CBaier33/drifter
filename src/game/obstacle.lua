@@ -13,24 +13,15 @@ function Obstacle:load()
 end
 
 function Obstacle:update(dt)
+  print(#self.table)
   for _, obstacle in ipairs(self.table) do
     if not self.crash or (self.crash and obstacle.mobile) then
       obstacle:move(dt)
     end
 
   end
-
-  -- adds new obstacle when necessary
-  --[[local last = self.table[#self.table]
-  if last and last.y > love.graphics.getHeight() / 4 then
-    self:newObstacle()
-  end]]
-
-
-  -- deletes obstacles that are gone
-  if #self.table > 0 and self.table[1].y > love.graphics.getHeight() then
-    table.remove(self.table, 1)
-  end
+  -- prunes table of obstacles that are gone
+  self:clearTable()
 
 end
 
@@ -47,7 +38,6 @@ function Obstacle:newObstacle()
   newObstacle:load()
 
   if #self.table > 0 and self:obstacleInLane(newObstacle.x, newObstacle.width) then
-    print('could not find')
     return
   end
   table.insert(self.table, newObstacle)
@@ -106,9 +96,11 @@ function Obstacle:registerCrash()
 end
 
 function Obstacle:clearTable()
-  self.table = {}
-  self.newObstacle(self)
-
+  for i, obstacle in ipairs(self.table) do
+    if obstacle.y > love.graphics.getHeight() then
+      table.remove(self.table, i)
+    end
+  end
 end
 
 
