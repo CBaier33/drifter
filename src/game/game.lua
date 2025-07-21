@@ -3,7 +3,7 @@ Game.__index = Game
 
 -- Dependencies
 local Player = require('game.player')
-local ObstacleTable = require('game.obstacle')
+local ObstacleTable = require('game.obstacleTable')
 local Road = require('game.road')
 local Menus = require('menus.menus')
 
@@ -36,8 +36,8 @@ function Game:update(dt)
 
   ObstacleTable:update(dt)
 
-  if self.spawnTimer >= 0.2 then
-    ObstacleTable:newObstacle()
+  if self.spawnTimer >= 0.5 then
+    ObstacleTable:newObstacle(Player)
     self.spawnTimer = 0
   end
 

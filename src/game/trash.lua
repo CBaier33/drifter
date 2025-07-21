@@ -3,19 +3,20 @@ TrashPile.__index = TrashPile
 
 function TrashPile:new()
   local self = setmetatable({}, TrashPile)
+
+  self.width = 100
+  self.height = 100
+
+  self.speed = 300
+  self.mobile = false
+
   return self
 
 end
 
-function TrashPile:load()
-  self.width = 100
-  self.height = 100
-
-  self.x =  math.random(0, 500)
+function TrashPile:load(xCoord)
+  self.x = xCoord
   self.y = -100
-
-  self.speed = 300
-  self.mobile = false
 
 end
 

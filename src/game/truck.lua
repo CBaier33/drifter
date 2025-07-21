@@ -3,19 +3,20 @@ Truck.__index = Truck
 
 function Truck:new()
   local self = setmetatable({}, Truck)
+
+  self.width = 50
+  self.height = 95
+
+  self.speed = 500
+  self.mobile = true
+
   return self
 
 end
 
-function Truck:load()
-  self.width = 50
-  self.height = 95
-
-  self.x = math.random(0, 500)
+function Truck:load(xCoord)
+  self.x = xCoord
   self.y = -95
-
-  self.speed = 500
-  self.mobile = true
 
   local success, imageOrError = pcall(love.graphics.newImage, 'images/Truck.png')
   if success then

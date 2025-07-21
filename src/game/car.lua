@@ -3,19 +3,20 @@ Car.__index = Car
 
 function Car:new()
   local self = setmetatable({}, Car)
+
+  self.width = 50
+  self.height = 80
+
+  self.speed = 500
+  self.mobile = true
+
   return self
 
 end
 
-function Car:load()
-  self.width = 50
-  self.height = 80
-
-  self.x = math.random(0, 500)
+function Car:load(xCoord)
+  self.x = xCoord
   self.y = -80
-
-  self.speed = 500
-  self.mobile = true
 
   -- error handling for failed image loads
   local success, imageOrError = pcall(love.graphics.newImage, 'images/Car.png')
