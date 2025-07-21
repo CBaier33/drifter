@@ -1,5 +1,4 @@
 local Car = {}
-
 Car.__index = Car
 
 function Car:new()
@@ -13,9 +12,10 @@ function Car:load()
   self.height = 80
 
   self.x = math.random(0, 500)
-  self.y = -50
+  self.y = -80
 
   self.speed = 500
+  self.mobile = true
 
   -- error handling for failed image loads
   local success, imageOrError = pcall(love.graphics.newImage, 'images/Car.png')

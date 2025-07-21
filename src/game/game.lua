@@ -12,7 +12,9 @@ function Game:new(stateManager)
 
   self.stateManager = stateManager
   self.gameActive = true -- temp to avoid crashes after collision
+
   self.gameTime = 0
+  self.spawnTimer = 0
 
   Menus:load(stateManager)
   Road:load()
@@ -26,6 +28,7 @@ end
 function Game:update(dt)
   Menus:update(dt)
   self.gameTime = self.gameTime + dt
+  self.spawnTimer = self.spawnTimer + dt
 
   Player:update(dt)
 
@@ -33,8 +36,14 @@ function Game:update(dt)
 
   ObstacleTable:update(dt)
 
+  if self.spawnTimer >= 0.2 then
+    ObstacleTable:newObstacle()
+    self.spawnTimer = 0
+  end
+
   if self:playerObjectCheckCollision() and self.gameActive then
     Player:registerCrash()
+    ObstacleTable:registerCrash()
     self.gameActive = false
     self.stateManager:gameOver()
     -- trigger menus, etc.

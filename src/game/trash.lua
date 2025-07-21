@@ -15,6 +15,7 @@ function TrashPile:load()
   self.y = -100
 
   self.speed = 300
+  self.mobile = false
 
 end
 

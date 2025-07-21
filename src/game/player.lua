@@ -72,18 +72,6 @@ function Player:move(dt)
   end
 end
 
-
---[[function Player:atBoundary(dir)
-  local left = 0
-  local right = love.graphics.getWidth()
-
-  if dir == "l" then
-    return self.x < left
-  elseif dir == "r" then
-    return self.x + self.width > right
-  end
-end]]
-
 function Player:draw()
   local scaleX = self.width / self.image:getWidth()
   local scaleY = self.height / self.image:getHeight()

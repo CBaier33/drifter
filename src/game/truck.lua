@@ -12,9 +12,10 @@ function Truck:load()
   self.height = 95
 
   self.x = math.random(0, 500)
-  self.y = -50
+  self.y = -95
 
   self.speed = 500
+  self.mobile = true
 
   local success, imageOrError = pcall(love.graphics.newImage, 'images/Truck.png')
   if success then
