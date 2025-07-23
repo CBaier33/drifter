@@ -30,6 +30,10 @@ function Game:update(dt)
   self.gameTime = self.gameTime + dt
   self.spawnTimer = self.spawnTimer + dt
 
+  if Menus.menuManager:isPaused() then
+    return
+  end
+
   Player:update(dt)
 
   if self.gameTime < 1 then return end
