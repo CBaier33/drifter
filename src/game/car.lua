@@ -7,7 +7,7 @@ function Car:new()
   self.width = 50
   self.height = 80
 
-  self.speed = 500
+  self.speed = 650
   self.mobile = true
 
   return self

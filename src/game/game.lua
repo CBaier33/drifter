@@ -35,6 +35,7 @@ function Game:update(dt)
   end
 
   Player:update(dt)
+  Road:update(dt)
 
   if self.gameTime < 1 then return end
 
@@ -48,6 +49,7 @@ function Game:update(dt)
   if self:playerObjectCheckCollision() and self.gameActive then
     Player:registerCrash()
     ObstacleTable:registerCrash()
+    Road:registerCrash()
     self.gameActive = false
     self.stateManager:gameOver()
     -- trigger menus, etc.
