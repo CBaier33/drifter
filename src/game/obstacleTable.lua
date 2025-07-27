@@ -103,12 +103,20 @@ end
 
 function ObstacleTable:registerCrash()
   self.crash = true
+  
+  for _, value in pairs(self.table) do
+    if value.mobile then
+      value.speed = value.speed * (-1)
+    else
+      value.speed = 0
+    end
+  end
 
 end
 
 function ObstacleTable:clearTable()
   for i, obstacle in ipairs(self.table) do
-    if obstacle.y > love.graphics.getHeight() then
+    if obstacle.y > love.graphics.getHeight() + 500 then
       table.remove(self.table, i)
     end
   end

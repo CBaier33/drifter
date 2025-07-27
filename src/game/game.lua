@@ -41,7 +41,7 @@ function Game:update(dt)
 
   ObstacleTable:update(dt)
 
-  if self.spawnTimer >= 0.5 then
+  if self.spawnTimer >= 0.5 and self.gameActive then
     ObstacleTable:newObstacle(Player)
     self.spawnTimer = 0
   end
