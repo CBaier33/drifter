@@ -7,7 +7,7 @@ function Truck:new()
   self.width = 50
   self.height = 95
 
-  self.speed = 1200
+  self.speed = 500
   self.mobile = true
 
   return self
