@@ -14,7 +14,7 @@ function Player:load()
 
   self.crash = false
 
-  self.image = love.graphics.newImage('images/Player.png')
+  self.image = love.graphics.newImage('images/Player_small.png')
 end
 
 function Player:update(dt)

@@ -3,7 +3,7 @@ local anim8 = require 'libs.anim8'
 
 function Road:load()
   self.width = 400
-  self.height = 800
+  self.height = 1080
 
   self.x = love.graphics.getWidth() * 0.5 - self.width * 0.5
   self.y = love.graphics.getHeight() - self.height
@@ -24,8 +24,8 @@ function Road:update(dt)
 end
 
 function Road:draw()
-  local scaleX = self.width / 1600
-  local scaleY = self.height / 3200
+  local scaleX = self.width / (self.spritesheet:getWidth() / 16)
+  local scaleY = self.height / self.spritesheet:getHeight()
   --love.graphics.draw(self.image, self.x, self.y, 0, scaleX, scaleY)
   self.animation:draw(self.spritesheet, self.x, self.y, 0 ,scaleX, scaleY)
 end
@@ -36,9 +36,9 @@ end
 
 function Road:buildAnimation()
 
-  local g = anim8.newGrid(1600, 3200, self.spritesheet:getWidth(), self.spritesheet:getHeight())
+  local g = anim8.newGrid(self.width, self.height, self.spritesheet:getWidth(), self.spritesheet:getHeight())
 
-  return anim8.newAnimation(g('1-4', 1), .02)
+  return anim8.newAnimation(g('1-16', 1), .01)
 end
 
 

@@ -7,7 +7,7 @@ function TrashPile:new()
   self.width = 100
   self.height = 100
 
-  self.speed = 500
+  self.speed = 1100
   self.mobile = false
 
   return self

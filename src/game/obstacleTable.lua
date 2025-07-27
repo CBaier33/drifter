@@ -34,11 +34,11 @@ end
 function ObstacleTable:newObstacle(player)
 
   local newObstacle = self:generateObstacle()
-  local x = math.random(0, 500)
+  local x = math.random(0, love.graphics.getWidth() - 100)
   local i = 0
 
   while #self.table > 0 and (not self:validSpawnPoint(x, newObstacle.width, player)) do
-    x = math.random(0, 500)
+    x = math.random(0, love.graphics.getWidth() - 100)
     i = i + 1
     if i > 500 then
       return
