@@ -1,4 +1,5 @@
 local anim8 = require 'libs/anim8'
+
 local Player = {}
 
 function Player:load()
@@ -15,7 +16,7 @@ function Player:load()
 
   self.crash = false
 
-  self.image = love.graphics.newImage('images/Player_small.png')
+  self.movementFrameNum = 21  -- how many frames are in this animation
   self.movementSpritesheet = love.graphics.newImage('images/driver-sprite-sheet.png')
   self.movementAnimation = self:buildAnimation()
 end
@@ -36,7 +37,7 @@ end
 function Player:buildAnimation()
   local g = anim8.newGrid(self.width, self.height, self.movementSpritesheet:getWidth(), self.movementSpritesheet:getHeight())
   
-  return anim8.newAnimation(g('1-21', 1), .02)
+  return anim8.newAnimation(g('1-' .. self.movementFrameNum .. '', 1), .02)
 end
 
 function Player:initPosition()
@@ -86,7 +87,7 @@ function Player:move(dt)
 end
 
 function Player:draw()
-  local scaleX = self.width / (self.movementSpritesheet:getWidth() / 21)
+  local scaleX = self.width / (self.movementSpritesheet:getWidth() / self.movementFrameNum)
   local scaleY = self.height / self.movementSpritesheet:getHeight()
   --love.graphics.draw(self.movementSpritesheet, self.x, self.y, 0, scaleX, scaleY)
   self.movementAnimation:draw(self.movementSpritesheet, self.x, self.y, 0, scaleX, scaleY)

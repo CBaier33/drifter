@@ -42,7 +42,9 @@ function ObstacleTable:newObstacle(player)
     i = i + 1
     if i > 500 then
       return
+
     end
+
   end
 
   newObstacle:load(x)
@@ -56,11 +58,15 @@ function ObstacleTable:validSpawnPoint(x, width, player)
     if x + width >= value.x and x <= value.x + value.width then
       return false
     end
+
     if self.crash and player and x + width >= player.x and x <= player.x + player.width then
       return false
     end
+
   end
+
   return true
+
 end
 
 
