@@ -18,7 +18,7 @@ function Truck:load(xCoord)
   self.x = xCoord
   self.y = -95
 
-  local success, imageOrError = pcall(love.graphics.newImage, 'images/Truck.png')
+  local success, imageOrError = pcall(love.graphics.newImage, 'game/images/Truck.png')
   if success then
     self.image = imageOrError
   else

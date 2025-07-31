@@ -12,7 +12,7 @@ function Road:load()
   self.crash = false
 
   self.frameNum = 16
-  self.spritesheet = love.graphics.newImage('images/road-sprite-sheet.png')
+  self.spritesheet = love.graphics.newImage('game/images/road-sprite-sheet.png')
   self.animation = self.buildAnimation(self)
 
 end
