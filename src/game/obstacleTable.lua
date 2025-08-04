@@ -34,11 +34,13 @@ end
 function ObstacleTable:newObstacle(player)
 
   local newObstacle = self:generateObstacle()
-  local x = math.random(0, love.graphics.getWidth() - 100)
+  --local x = math.random(0, love.graphics.getWidth() - 100)
+  local x = self:randomSpawnX()
   local i = 0
 
   while #self.table > 0 and (not self:validSpawnPoint(x, newObstacle.width, player)) do
-    x = math.random(0, love.graphics.getWidth() - 100)
+    --x = math.random(0, love.graphics.getWidth() - 100)
+    x = self:randomSpawnX()
     i = i + 1
     if i > 500 then
       return
@@ -50,6 +52,19 @@ function ObstacleTable:newObstacle(player)
   newObstacle:load(x)
 
   table.insert(self.table, newObstacle)
+
+end
+
+function ObstacleTable:randomSpawnX()
+  local spawn = math.random(1, 5)
+  local locMap = {}
+  locMap[1] = (love.graphics.getWidth() * 0.5 - 200) + 20
+  locMap[2] = (love.graphics.getWidth() * 0.5 - 200) + 100
+  locMap[3] = (love.graphics.getWidth() * 0.5 - 200) + 173
+  locMap[4] = (love.graphics.getWidth() * 0.5 - 200) + 252
+  locMap[5] = (love.graphics.getWidth() * 0.5 - 200) + 323
+
+  return locMap[spawn]
 
 end
 
@@ -109,7 +124,7 @@ end
 
 function ObstacleTable:registerCrash()
   self.crash = true
-  
+
   for _, value in pairs(self.table) do
     if value.mobile then
       value.speed = value.speed * (-1)
