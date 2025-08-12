@@ -6,6 +6,7 @@ local Player = require('game.player')
 local ObstacleTable = require('game.obstacleTable')
 local Road = require('game.road')
 local Menus = require('menus.menus')
+local Score = require('game.score')
 
 function Game:new(stateManager)
   local self = setmetatable({}, Game)
@@ -20,6 +21,7 @@ function Game:new(stateManager)
   Road:load()
   Player:load()
   ObstacleTable:load()
+  Score:load()
 
   return self
 
@@ -39,6 +41,7 @@ function Game:update(dt)
 
   if self.gameTime < 1 then return end
 
+  Score:update(dt)
   ObstacleTable:update(dt)
 
   if self.spawnTimer >= 0.5 and self.gameActive then
@@ -50,6 +53,7 @@ function Game:update(dt)
     Player:registerCrash()
     ObstacleTable:registerCrash()
     Road:registerCrash()
+    Score:setCrash()
     self.gameActive = false
     self.stateManager:gameOver()
     -- trigger menus, etc.
@@ -60,8 +64,9 @@ end
 
 function Game:draw()
   Road:draw()
-  Player:draw()
+  Score:draw()
   ObstacleTable:draw()
+  Player:draw()
   Menus:draw()
 
 end

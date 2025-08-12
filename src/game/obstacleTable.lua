@@ -7,16 +7,13 @@ local TrashPile = require('game.trash')
 
 function ObstacleTable:load()
   self.table = {}
-  self.crash = false
   self:newObstacle(nil)
 
 end
 
 function ObstacleTable:update(dt)
   for _, obstacle in ipairs(self.table) do
-    if not self.crash or (self.crash and obstacle.mobile) then
-      obstacle:move(dt)
-    end
+    obstacle:update(dt)
 
   end
   -- prunes table of obstacles that are gone
@@ -34,37 +31,21 @@ end
 function ObstacleTable:newObstacle(player)
 
   local newObstacle = self:generateObstacle()
-  --local x = math.random(0, love.graphics.getWidth() - 100)
-  local x = self:randomSpawnX()
-  local i = 0
+  local xCoord = newObstacle:randomSpawnX()
 
-  while #self.table > 0 and (not self:validSpawnPoint(x, newObstacle.width, player)) do
-    --x = math.random(0, love.graphics.getWidth() - 100)
-    x = self:randomSpawnX()
+  local i = 0
+  while #self.table > 0 and (not self:validSpawnPoint(xCoord, newObstacle.width, player)) do
+    xCoord = newObstacle:randomSpawnX()
     i = i + 1
-    if i > 500 then
+    if i > 100 then
       return
 
     end
 
   end
 
-  newObstacle:load(x)
-
+  newObstacle:load(xCoord)
   table.insert(self.table, newObstacle)
-
-end
-
-function ObstacleTable:randomSpawnX()
-  local spawn = math.random(1, 5)
-  local locMap = {}
-  locMap[1] = (love.graphics.getWidth() * 0.5 - 200) + 20
-  locMap[2] = (love.graphics.getWidth() * 0.5 - 200) + 100
-  locMap[3] = (love.graphics.getWidth() * 0.5 - 200) + 173
-  locMap[4] = (love.graphics.getWidth() * 0.5 - 200) + 252
-  locMap[5] = (love.graphics.getWidth() * 0.5 - 200) + 323
-
-  return locMap[spawn]
 
 end
 
@@ -87,9 +68,6 @@ end
 
 function ObstacleTable:generateObstacle()
   local obstacleType = math.random(3)
-  if self.crash then
-    obstacleType = math.random(2)
-  end
   local obstacle = nil
 
   if obstacleType == 1 then
@@ -123,14 +101,8 @@ function ObstacleTable:checkCollision(player)
 end
 
 function ObstacleTable:registerCrash()
-  self.crash = true
-
-  for _, value in pairs(self.table) do
-    if value.mobile then
-      value.speed = value.speed * (-1)
-    else
-      value.speed = 0
-    end
+  for _, obstacle in pairs(self.table) do
+    obstacle:setCrash()
   end
 
 end
