@@ -10,6 +10,8 @@ function Truck:new()
   self.speed = 500
   self.mobile = true
 
+  self.crash = false
+
   return self
 
 end
@@ -18,7 +20,7 @@ function Truck:load(xCoord)
   self.x = xCoord
   self.y = -95
 
-  local success, imageOrError = pcall(love.graphics.newImage, 'images/Truck.png')
+  local success, imageOrError = pcall(love.graphics.newImage, 'game/images/Truck.png')
   if success then
     self.image = imageOrError
   else
@@ -28,9 +30,19 @@ function Truck:load(xCoord)
 
 end
 
+function Truck:update(dt)
+  if self.mobile then
+    self:move(dt)
+  end
+end
+
 function Truck:move(dt)
   self.y = self.y + self.speed * dt
 
+end
+
+function Truck:setCrash()
+  self.speed = self.speed * (-1)
 end
 
 function Truck:draw()
@@ -41,6 +53,19 @@ function Truck:draw()
   else
     love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
   end
+end
+
+function Truck:randomSpawnX()
+  local spawn = math.random(1, 5)
+  local locMap = {}
+  locMap[1] = (love.graphics.getWidth() * 0.5 - 200) + 20
+  locMap[2] = (love.graphics.getWidth() * 0.5 - 200) + 100
+  locMap[3] = (love.graphics.getWidth() * 0.5 - 200) + 173
+  locMap[4] = (love.graphics.getWidth() * 0.5 - 200) + 252
+  locMap[5] = (love.graphics.getWidth() * 0.5 - 200) + 323
+
+  return locMap[spawn]
+
 end
 
 return Truck

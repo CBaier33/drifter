@@ -7,16 +7,13 @@ local TrashPile = require('game.trash')
 
 function ObstacleTable:load()
   self.table = {}
-  self.crash = false
   self:newObstacle(nil)
 
 end
 
 function ObstacleTable:update(dt)
   for _, obstacle in ipairs(self.table) do
-    if not self.crash or (self.crash and obstacle.mobile) then
-      obstacle:move(dt)
-    end
+    obstacle:update(dt)
 
   end
   -- prunes table of obstacles that are gone
@@ -34,19 +31,20 @@ end
 function ObstacleTable:newObstacle(player)
 
   local newObstacle = self:generateObstacle()
-  local x = math.random(0, 500)
-  local i = 0
+  local xCoord = newObstacle:randomSpawnX()
 
-  while #self.table > 0 and (not self:validSpawnPoint(x, newObstacle.width, player)) do
-    x = math.random(0, 500)
+  local i = 0
+  while #self.table > 0 and (not self:validSpawnPoint(xCoord, newObstacle.width, player)) do
+    xCoord = newObstacle:randomSpawnX()
     i = i + 1
-    if i > 500 then
+    if i > 100 then
       return
+
     end
+
   end
 
-  newObstacle:load(x)
-
+  newObstacle:load(xCoord)
   table.insert(self.table, newObstacle)
 
 end
@@ -56,19 +54,20 @@ function ObstacleTable:validSpawnPoint(x, width, player)
     if x + width >= value.x and x <= value.x + value.width then
       return false
     end
+
     if self.crash and player and x + width >= player.x and x <= player.x + player.width then
       return false
     end
+
   end
+
   return true
+
 end
 
 
 function ObstacleTable:generateObstacle()
   local obstacleType = math.random(3)
-  if self.crash then
-    obstacleType = math.random(2)
-  end
   local obstacle = nil
 
   if obstacleType == 1 then
@@ -102,13 +101,15 @@ function ObstacleTable:checkCollision(player)
 end
 
 function ObstacleTable:registerCrash()
-  self.crash = true
+  for _, obstacle in pairs(self.table) do
+    obstacle:setCrash()
+  end
 
 end
 
 function ObstacleTable:clearTable()
   for i, obstacle in ipairs(self.table) do
-    if obstacle.y > love.graphics.getHeight() then
+    if obstacle.y > love.graphics.getHeight() + 500 then
       table.remove(self.table, i)
     end
   end
