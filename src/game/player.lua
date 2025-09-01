@@ -126,7 +126,7 @@ function Player:move(dt)
     -- Move player
     if (self.vx < 0 and self.x <= (love.graphics.getWidth() * 0.5 - self.width * 0.5) - 180) or
        (self.vx > 0 and self.x >= (love.graphics.getWidth() * 0.5 - self.width * 0.5) + 180) then
-      self.x = self.x
+      self.x = self.x - self.vx * dt
     else
       self.x = self.x + self.vx * dt
     end

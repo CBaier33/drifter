@@ -1,3 +1,5 @@
+local anim8 = require 'libs/anim8'
+
 local Truck = {}
 Truck.__index = Truck
 
@@ -20,18 +22,15 @@ function Truck:load(xCoord)
   self.x = xCoord
   self.y = -95
 
-  local success, imageOrError = pcall(love.graphics.newImage, 'game/images/Truck.png')
-  if success then
-    self.image = imageOrError
-  else
-    print("Failed to load Truck image:", imageOrError)
-    self.image = nil
-  end
+  self.movementFrameNum = 21  -- how many frames are in this animation
+  self.movementSpritesheet = love.graphics.newImage('game/images/truck-sprite-sheet.png')
+  self.movementAnimation = self:buildAnimation()
 
 end
 
 function Truck:update(dt)
   if self.mobile then
+    self.movementAnimation:update(dt)
     self:move(dt)
   end
 end
@@ -45,14 +44,19 @@ function Truck:setCrash()
   self.speed = self.speed * (-1)
 end
 
+function Truck:buildAnimation()
+  local g = anim8.newGrid(self.width, self.height, self.movementSpritesheet:getWidth(), self.movementSpritesheet:getHeight())
+
+  return anim8.newAnimation(g('1-' .. self.movementFrameNum .. '', 1), .06)
+
+end
+
 function Truck:draw()
-  if self.image then
-    local scaleX = self.width / self.image:getWidth()
-    local scaleY = self.height / self.image:getHeight()
-    love.graphics.draw(self.image, self.x, self.y, 0, scaleX, scaleY)
-  else
-    love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
-  end
+  local scaleX = self.width / (self.movementSpritesheet:getWidth() / self.movementFrameNum)
+  local scaleY = self.height / self.movementSpritesheet:getHeight()
+
+  self.movementAnimation:draw(self.movementSpritesheet, self.x, self.y, 0, scaleX, scaleY)
+
 end
 
 function Truck:randomSpawnX()
