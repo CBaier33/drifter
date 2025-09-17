@@ -38,6 +38,7 @@ function Player:update(dt)
   elseif self.crash and not self.fire then
     self.crashAnimation:update(dt)
 
+    -- set fire to true when crash animation finishes
     local currentFrame = math.floor(self.crashAnimation.position) + 1
     if currentFrame == #self.crashAnimation.frames then
       self.fire = true
@@ -123,7 +124,12 @@ function Player:move(dt)
     self.vx = math.max(math.min(self.vx, self.maxSpeed), -self.maxSpeed)
 
     -- Move player
-    self.x = self.x + self.vx * dt
+    if (self.vx < 0 and self.x <= (love.graphics.getWidth() * 0.5 - self.width * 0.5) - 180) or
+       (self.vx > 0 and self.x >= (love.graphics.getWidth() * 0.5 - self.width * 0.5) + 180) then
+      self.x = self.x - self.vx * dt
+    else
+      self.x = self.x + self.vx * dt
+    end
 
   end
 end
