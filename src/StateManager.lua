@@ -5,6 +5,11 @@ local StateManager = {
 
 local Game = require('game.game')
 local StartMenu = require('menus.start.menu')
+local Audio = require('audio')
+
+function StateManager:load()
+  Audio:load()
+end
 
 function StateManager:switch(newState, manager)
   if self.current and self.current.exit then
@@ -15,9 +20,13 @@ function StateManager:switch(newState, manager)
     self.current = StartMenu
     self.gameActive = false
     self.current:load(manager)
+    Audio:play("menu")
+
   elseif newState == "game" then
     self.current = Game:new(manager)
     self.gameActive = true
+    Audio:play("game")
+
   end
 
 end

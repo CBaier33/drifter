@@ -1,10 +1,13 @@
+local ButtonsClass = require('menus.exit.buttons')
+
 local ExitMenu = {
-  Buttons = require('menus.exit.buttons'),
+  Buttons = nil
 }
 
 function ExitMenu:load(stateManager, menuManager)
   self.stateManager = stateManager
   self.menuManager = menuManager
+  self.Buttons = ButtonsClass.new()
   self.Buttons:load(self.stateManager, self.menuManager)
   self.active = false
 end

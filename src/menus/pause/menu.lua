@@ -1,10 +1,13 @@
+local ButtonsClass = require('menus.pause.buttons')
+
 local PauseMenu = {
-  Buttons = require('menus.pause.buttons'),
+  Buttons = nil
 }
 
 function PauseMenu:load(stateManager, menuManager)
   self.stateManager = stateManager
   self.menuManager = menuManager
+  self.Buttons = ButtonsClass.new()
   self.Buttons:load(self.stateManager, self.menuManager)
   self.active = false
 end

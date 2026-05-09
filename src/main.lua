@@ -1,6 +1,7 @@
 local StateManager = require('StateManager')
 
 function love.load()
+  StateManager:load()
   StateManager:switch("start", StateManager)
 end
 

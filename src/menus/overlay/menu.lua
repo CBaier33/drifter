@@ -1,9 +1,12 @@
+local ButtonsClass = require('menus.overlay.buttons')
+
 local OverlayMenu = {
-  Buttons = require('menus.overlay.buttons')
+  Buttons = nil
 }
 
 function OverlayMenu:load(menuManager)
   self.menuManager = menuManager
+  self.Buttons = ButtonsClass.new()
   self.Buttons:load(self.menuManager)
   self.active = true
 end
